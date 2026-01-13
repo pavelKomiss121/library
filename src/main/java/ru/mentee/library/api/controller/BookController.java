@@ -1,5 +1,6 @@
 package ru.mentee.library.api.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,12 +29,20 @@ public class BookController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Book> getBook(@PathVariable Long id) {
-        return ResponseEntity.ok(bookService.findById(id));
+        try {
+            Book book = bookService.findById(id);
+            return ResponseEntity.ok(book);
+        } catch (RuntimeException e) {
+            if (e.getMessage() != null && e.getMessage().contains("not found")) {
+                return ResponseEntity.notFound().build();
+            }
+            throw e;
+        }
     }
 
     @PostMapping
     @PreAuthorize("hasAnyRole('LIBRARIAN', 'ADMIN')")
-    public ResponseEntity<Book> createBook(@RequestBody CreateBookRequest request, @AuthenticationPrincipal Jwt jwt) {
+    public ResponseEntity<Book> createBook(@Valid @RequestBody CreateBookRequest request, @AuthenticationPrincipal Jwt jwt) {
         Book book = bookService.createBook(request);
 
         String username = jwt.getSubject();
@@ -49,7 +58,7 @@ public class BookController {
     @PreAuthorize("hasAnyRole('LIBRARIAN', 'ADMIN')")
     public ResponseEntity<Book> updateBook(
             @PathVariable Long id,
-            @RequestBody CreateBookRequest request) {
+            @Valid @RequestBody CreateBookRequest request) {
         Book book = bookService.updateBook(id, request);
         return ResponseEntity.ok(book);
     }
@@ -73,8 +82,17 @@ public class BookController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteBook(@PathVariable Long id) {
-        bookService.deleteBook(id);
-        return ResponseEntity.noContent().build();
+        // Проверяем существование книги перед удалением
+        try {
+            bookService.findById(id);
+            bookService.deleteBook(id);
+            return ResponseEntity.noContent().build();
+        } catch (RuntimeException e) {
+            if (e.getMessage() != null && e.getMessage().contains("not found")) {
+                return ResponseEntity.notFound().build();
+            }
+            throw e;
+        }
     }
 }
 
