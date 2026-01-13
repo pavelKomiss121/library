@@ -1,0 +1,22 @@
+# 1. URL внешнего API
+openlibrary:
+  api:
+    url: https://openlibrary.org
+
+# 2. Настройка Feign
+feign:
+  client:
+    config:
+      default:                    # Для всех клиентов по умолчанию
+        connectTimeout: 5000
+        readTimeout: 10000
+        loggerLevel: basic
+      open-library-client:        # Специфично для этого клиента
+        url: ${openlibrary.api.url}
+        loggerLevel: full
+
+# 3. Настройка логирования Spring
+logging:
+  level:
+    ru.mentee.library.client.OpenLibraryClient: DEBUG  # Имя интерфейса!
+    ru.mentee.library.service.BookService: DEBUG  # Для отображения log.debug
