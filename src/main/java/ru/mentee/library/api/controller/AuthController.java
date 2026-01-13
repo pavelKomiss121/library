@@ -28,11 +28,9 @@ public class AuthController {
   public ResponseEntity<TokenResponse> login(@RequestBody LoginRequest request) {
     log.info("Login attempt for user: {}", request.username());
 
-    try{
-      Authentication authentication = new UsernamePasswordAuthenticationToken(
-          request.username(),
-          request.password()
-      );
+    try {
+      Authentication authentication =
+          new UsernamePasswordAuthenticationToken(request.username(), request.password());
 
       Authentication authenticated = authenticationManager.authenticate(authentication);
 
@@ -55,10 +53,10 @@ public class AuthController {
   public ResponseEntity<TokenResponse> refresh(@RequestBody RefreshTokenRequest request) {
     log.info("Refresh token request");
 
-    try{
+    try {
       TokenResponse tokens = tokenService.refreshAccessToken(request.refreshToken());
       return ResponseEntity.ok(tokens);
-    }catch (Exception e) {
+    } catch (Exception e) {
       log.warn("Invalid refresh token: {}", e.getMessage());
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
@@ -70,6 +68,4 @@ public class AuthController {
     tokenService.revokeRefreshToken(request.refreshToken());
     return ResponseEntity.ok().build();
   }
-
-
 }

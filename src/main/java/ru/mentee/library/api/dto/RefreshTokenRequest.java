@@ -1,5 +1,3 @@
 package ru.mentee.library.api.dto;
 
-public record RefreshTokenRequest(
-    String refreshToken
-) {}
+public record RefreshTokenRequest(String refreshToken) {}

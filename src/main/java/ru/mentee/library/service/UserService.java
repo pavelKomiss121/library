@@ -9,8 +9,6 @@ import ru.mentee.library.api.dto.CreateUserRequest;
 import ru.mentee.library.domain.model.User;
 import ru.mentee.library.domain.repository.UserRepository;
 
-import java.util.List;
-
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -20,13 +18,13 @@ public class UserService {
 
   @Transactional
   public User createUser(CreateUserRequest request) {
-    User user = User.builder()
-        .email(request.getEmail())
-        .password(passwordEncoder.encode(request.getPassword()))
-        .role(request.getRole())
-        .active(true)
-        .build();
+    User user =
+        User.builder()
+            .email(request.getEmail())
+            .password(passwordEncoder.encode(request.getPassword()))
+            .role(request.getRole())
+            .active(true)
+            .build();
     return userRepository.save(user);
   }
-
 }
