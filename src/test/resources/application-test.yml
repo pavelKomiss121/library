@@ -4,11 +4,11 @@ spring:
     driver-class-name: org.h2.Driver
     username: sa
     password:
-  
+
   h2:
     console:
       enabled: true
-  
+
   jpa:
     hibernate:
       ddl-auto: create-drop
@@ -21,4 +21,3 @@ logging:
   level:
     org.springframework.security: DEBUG
     ru.mentee.library: DEBUG
-

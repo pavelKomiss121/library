@@ -2,9 +2,8 @@ package ru.mentee.library.api.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Data;
-
 import java.util.List;
+import lombok.Data;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -29,7 +28,7 @@ public class OpenLibraryBookDto {
 
   @Data
   @JsonIgnoreProperties(ignoreUnknown = true)
-  public static class Author{
+  public static class Author {
     @JsonProperty("name")
     private String name;
 

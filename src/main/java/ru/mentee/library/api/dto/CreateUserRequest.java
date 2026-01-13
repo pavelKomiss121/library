@@ -5,10 +5,7 @@ import ru.mentee.library.security.Role;
 
 @Data
 public class CreateUserRequest {
-    private String email;
-    private String password;
-    private Role role;
+  private String email;
+  private String password;
+  private Role role;
 }
-
-
-
