@@ -14,17 +14,27 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
+import ru.mentee.library.domain.model.User;
+import ru.mentee.library.domain.repository.UserRepository;
+import ru.mentee.library.security.Role;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class SecureApiTest {
 
   @Value("${local.server.port}")
   private int port;
+
+  @Autowired private UserRepository userRepository;
+
+  @Autowired private PasswordEncoder passwordEncoder;
 
   private static RequestSpecification userSpec;
   private static RequestSpecification librarianSpec;
@@ -42,8 +52,40 @@ class SecureApiTest {
   private static Integer createdBookId;
 
   @BeforeAll
-  static void setupSpecs() {
-    // Инициализация будет выполнена в setupPort()
+  void setupTestUsers() {
+    // Создаем тестовых пользователей, если их еще нет
+    if (userRepository.findByEmail("user@example.com").isEmpty()) {
+      User user =
+          User.builder()
+              .email("user@example.com")
+              .password(passwordEncoder.encode("password"))
+              .role(Role.USER)
+              .active(true)
+              .build();
+      userRepository.save(user);
+    }
+
+    if (userRepository.findByEmail("librarian@example.com").isEmpty()) {
+      User librarian =
+          User.builder()
+              .email("librarian@example.com")
+              .password(passwordEncoder.encode("password"))
+              .role(Role.LIBRARIAN)
+              .active(true)
+              .build();
+      userRepository.save(librarian);
+    }
+
+    if (userRepository.findByEmail("admin@example.com").isEmpty()) {
+      User admin =
+          User.builder()
+              .email("admin@example.com")
+              .password(passwordEncoder.encode("password"))
+              .role(Role.ADMIN)
+              .active(true)
+              .build();
+      userRepository.save(admin);
+    }
   }
 
   @BeforeEach
@@ -108,7 +150,8 @@ class SecureApiTest {
             .when()
             .post("/auth/login")
             .then()
-            .spec(successSpec)
+            .statusCode(200)
+            .contentType(ContentType.JSON)
             .body("accessToken", notNullValue())
             .body("refreshToken", notNullValue())
             .body("accessToken", not(emptyString()))
