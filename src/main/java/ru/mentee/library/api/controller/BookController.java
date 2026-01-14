@@ -45,11 +45,13 @@ public class BookController {
       @Valid @RequestBody CreateBookRequest request, @AuthenticationPrincipal Jwt jwt) {
     Book book = bookService.createBook(request);
 
-    String username = jwt.getSubject();
-    String scope = jwt.getClaim("scope");
+    if (jwt != null) {
+      String username = jwt.getSubject();
+      String scope = jwt.getClaim("scope");
 
-    System.out.println("User: " + username);
-    System.out.println("Roles: " + scope);
+      System.out.println("User: " + username);
+      System.out.println("Roles: " + scope);
+    }
 
     return ResponseEntity.status(HttpStatus.CREATED).body(book);
   }
