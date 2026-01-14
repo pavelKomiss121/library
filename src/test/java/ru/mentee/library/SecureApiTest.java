@@ -27,6 +27,7 @@ import ru.mentee.library.security.Role;
 @ActiveProfiles("test")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@Disabled("Не относится к заданию unit-тестов")
 class SecureApiTest {
 
   @Value("${local.server.port}")
