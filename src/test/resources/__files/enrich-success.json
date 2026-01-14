@@ -1,0 +1,23 @@
+{
+  "ISBN:978-0-123456-78-9": {
+    "title": "Test Book",
+    "authors": [
+      {
+        "name": "Test Author",
+        "url": "https://openlibrary.org/authors/OL123456A"
+      }
+    ],
+    "publishers": [
+      {
+        "name": "Test Publisher"
+      }
+    ],
+    "publish_date": "2024",
+    "number_of_pages": 300,
+    "identifiers": {
+      "isbn_10": ["0123456789"],
+      "isbn_13": ["9780123456789"]
+    }
+  }
+}
+
