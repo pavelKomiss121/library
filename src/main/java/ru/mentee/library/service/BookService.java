@@ -1,5 +1,7 @@
 package ru.mentee.library.service;
 
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
 import jakarta.annotation.PostConstruct;
 import java.util.List;
 import java.util.Map;
@@ -22,10 +24,16 @@ public class BookService {
 
   private final BookRepository bookRepository;
   private final OpenLibraryClient openLibraryClient;
+  private final MeterRegistry meterRegistry;
+  private Counter booksCreatedCounter;
 
   @PostConstruct
   public void init() {
     log.info("OpenLibraryClient initialized: {}", openLibraryClient != null);
+    this.booksCreatedCounter =
+        Counter.builder("books_created_total")
+            .description("Total number of created books")
+            .register(meterRegistry);
   }
 
   public BookInfoResponse getBookInfoByIsbn(String isbn) {
@@ -106,7 +114,9 @@ public class BookService {
             .publicationYear(request.getPublicationYear())
             .available(true)
             .build();
-    return bookRepository.save(book);
+    Book savedBook = bookRepository.save(book);
+    booksCreatedCounter.increment();
+    return savedBook;
   }
 
   public Book findById(Long id) {

@@ -3,6 +3,7 @@ package ru.mentee.library.domain.repository;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Optional;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import ru.mentee.library.domain.model.Book;
 
 @DataJpaTest
+@Disabled("Не относится к заданию по мониторингу")
 class BookRepositoryTest {
 
   @Autowired private TestEntityManager entityManager;

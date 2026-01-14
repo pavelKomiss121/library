@@ -136,6 +136,8 @@ public class SecurityConfig {
         .authorizeHttpRequests(
             authz ->
                 authz
+                    .requestMatchers("/actuator/**")
+                    .permitAll()
                     .requestMatchers("/auth/**")
                     .permitAll()
                     .requestMatchers(HttpMethod.GET, "/api/books")

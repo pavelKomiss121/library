@@ -9,3 +9,13 @@ logging:
   level:
     org.springframework.security: DEBUG
     ru.mentee.library: DEBUG
+
+# Настройка Actuator для тестов
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health,info,prometheus,metrics,loggers"
+  endpoint:
+    health:
+      show-details: always
