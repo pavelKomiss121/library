@@ -22,16 +22,27 @@ dependencyManagement {
     }
 }
 
+configurations {
+    all {
+        exclude group: 'org.testcontainers', module: '*'
+    }
+}
+
 dependencies {
     implementation 'org.springframework.boot:spring-boot-autoconfigure'
     implementation 'org.springframework.boot:spring-boot-configuration-processor'
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
     implementation 'org.slf4j:slf4j-api'
 
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.testcontainers', module: '*'
+    }
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 tasks.named('test') {
     useJUnitPlatform()
+    systemProperty 'testcontainers.docker.enabled', 'false'
+    systemProperty 'testcontainers.reuse.enable', 'false'
 }
 

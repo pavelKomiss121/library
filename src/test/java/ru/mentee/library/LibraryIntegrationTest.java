@@ -2,6 +2,7 @@ package ru.mentee.library;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,6 +18,7 @@ import ru.mentee.library.domain.repository.BookRepository;
 @SpringBootTest
 @Testcontainers
 @ActiveProfiles("test")
+@Disabled("Требует Docker, не относится к заданию timing-starter")
 class LibraryIntegrationTest {
 
   @Container
